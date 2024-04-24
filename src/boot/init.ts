@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { db } from "../connections/connection";
+import { db } from "../connections/connection.js";
 
 export async function executeGame() {
 	const choice = await inquirer.prompt([

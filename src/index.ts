@@ -1,6 +1,6 @@
 import chalk from "chalk";
-import { executeGame } from "./boot/init";
-import { db } from "./connections/connection";
+import { executeGame } from "./boot/init.js";
+import { db } from "./connections/connection.js";
 
 async function main() {
 	let running = true;
