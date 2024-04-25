@@ -1,18 +1,36 @@
 import chalk from "chalk";
-import { executeGame } from "./boot/init.js";
+import { bootGame } from "./boot/bootGame.js";
 import { db } from "./connections/connection.js";
+import { executeGame } from "./game/gameloop.js";
 
 async function main() {
-	let running = true;
+	let booting = true;
+	let running = false;
+	let activeCharacter;
 
-	while (running) {
-		running = await executeGame();
+	while (booting) {
+		const { success, character } = await bootGame();
+
+		if (success) {
+			activeCharacter = character;
+			running = true;
+			booting = false;
+		}
 	}
 
+	while (running) {
+		if (!activeCharacter) running = false;
+
+		running = await executeGame(activeCharacter);
+	}
+
+	await db.query("UPDATE players SET active = FALSE;");
+	db.end();
 	console.log(chalk.bold.yellow("Game closed. Thanks for Playing!"));
 }
 
-main().catch((error) => {
+main().catch(async (error) => {
+	await db.query("UPDATE players SET active = FALSE;");
 	db.end();
 	console.error(`Oops, something went wrong!\n${error}`);
 });
