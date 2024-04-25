@@ -5,7 +5,6 @@ import { executeGame } from "./game/gameloop.js";
 
 async function main() {
 	let booting = true;
-	let running = false;
 	let activeCharacter;
 
 	while (booting) {
@@ -13,15 +12,12 @@ async function main() {
 
 		if (success) {
 			activeCharacter = character;
-			running = true;
 			booting = false;
 		}
 	}
 
-	while (running) {
-		if (!activeCharacter) running = false;
-
-		running = await executeGame(activeCharacter);
+	while (activeCharacter) {
+		activeCharacter = await executeGame(activeCharacter);
 	}
 
 	await db.query("UPDATE players SET active = FALSE;");

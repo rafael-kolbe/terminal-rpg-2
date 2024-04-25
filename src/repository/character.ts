@@ -25,7 +25,7 @@ export async function getCharacterList() {
 		const query = `
             SELECT
             level,
-            class,
+            className,
             name
             FROM players
             WHERE deleted_at IS NULL
@@ -34,23 +34,23 @@ export async function getCharacterList() {
 
 		const { rows: characters } = await db.query(query);
 
-		return characters.map((character) => `Lv: ${character.level} ${character.class} | ${character.name}`);
+		return characters.map((character) => `Lv: ${character.level} ${character.className} | ${character.name}`);
 	} catch (error) {
 		throw new Error(`getCharacterList crashed.\nLog: ${error}`);
 	}
 }
 
-export async function createCharacter(character: { name: string; class: string }) {
+export async function createCharacter(character: { name: string; className: string }) {
 	try {
 		const query = `
-            INSERT INTO players(name, class)
+            INSERT INTO players(name, className)
             VALUES($1, $2)
             RETURNING *;
         `;
 
 		character.name = formatCharacterName(character.name);
 
-		const { rows: createdCharacter } = await db.query(query, [character.name, character.class]);
+		const { rows: createdCharacter } = await db.query(query, [character.name, character.className]);
 
 		return createdCharacter[0];
 	} catch (error: unknown) {

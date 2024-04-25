@@ -14,18 +14,44 @@ datasource db {
 }
 
 model Player {
-  id     Int     @id @default(autoincrement())
-  name   String  @unique @db.VarChar(20)
-  class  Class
-  level  Int     @default(1)
-  exp    Int     @default(0)
-  active Boolean @default(false)
+  id        Int    @id @default(autoincrement())
+  name      String @unique @db.VarChar(20)
+  className String
+  level     Int    @default(1)
+  exp       Int    @default(0)
+  hp        Int
+  mp        Int
+  p_atk     Int
+  m_atk     Int
 
+  active     Boolean   @default(false)
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now()) @updatedAt
   deleted_at DateTime?
 
+  class Class @relation(fields: [className], references: [name])
+
   @@map("players")
+}
+
+model Class {
+  id             Int    @id @default(autoincrement())
+  name           String @unique
+  rank           Int
+  required_class Int
+  required_level Int
+  base_hp        Int
+  hp_lv          Int
+  base_mp        Int
+  mp_lv          Int
+  base_p_atk     Int
+  p_atk_lv       Int
+  base_m_atk     Int
+  m_atk_lv       Int
+
+  Player Player[]
+
+  @@map("classes")
 }
 
 model ExperienceTable {
@@ -33,10 +59,4 @@ model ExperienceTable {
   expRequired Int @map("exp_required")
 
   @@map("experience_table")
-}
-
-enum Class {
-  Knight
-  Mage
-  Archer
 }

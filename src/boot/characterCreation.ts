@@ -15,7 +15,7 @@ export async function characterCreation() {
 					message: "Choose your name:",
 				},
 				{
-					name: "class",
+					name: "className",
 					type: "list",
 					message: "Choose your class:",
 					choices: ["Knight", "Mage", "Archer"],
@@ -26,7 +26,7 @@ export async function characterCreation() {
 
 			if (createdCharacter) {
 				console.log(chalk.bold.green(`Welcome to the game, ${createdCharacter.name}!`));
-				console.log(chalk.bold.green(`ID: ${createdCharacter.id}\nName: ${createdCharacter.name}\nClass: ${createdCharacter.class}`));
+				console.log(chalk.bold.green(`ID: ${createdCharacter.id}\nName: ${createdCharacter.name}\nClass: ${createdCharacter.className}`));
 				creating = false;
 			}
 		}
