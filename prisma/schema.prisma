@@ -23,7 +23,6 @@ model Player {
   mp         Int
   p_atk      Int
   m_atk      Int
-  active     Boolean   @default(false)
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now()) @updatedAt
   deleted_at DateTime?

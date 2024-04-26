@@ -20,13 +20,11 @@ async function main() {
 		activeCharacter = await executeGame(activeCharacter);
 	}
 
-	await db.query("UPDATE players SET active = FALSE;");
 	db.end();
 	console.log(chalk.bold.yellow("Game closed. Thanks for Playing!"));
 }
 
 main().catch(async (error) => {
-	await db.query("UPDATE players SET active = FALSE;");
 	db.end();
 	console.error(`Oops, something went wrong!\n${error}`);
 });

@@ -68,20 +68,21 @@ export async function createCharacter(character: { name: string; className: stri
 	}
 }
 
-export async function updateActiveCharacter(characterName: string) {
+export async function selectCharacter(characterName: string) {
 	try {
 		const query = `
-            UPDATE players
-            SET active = TRUE
-            WHERE name = $1
-            RETURNING *;
+            SELECT
+			*
+			FROM players
+			WHERE name = $1;
         `;
 
 		const { rows: activeCharacter } = await db.query(query, [characterName]);
+		console.log(activeCharacter);
 
 		return activeCharacter[0];
 	} catch (error) {
-		throw new Error(`updateActiveCharacter crashed.\nLog: ${error}`);
+		throw new Error(`selectCharacter crashed.\nLog: ${error}`);
 	}
 }
 

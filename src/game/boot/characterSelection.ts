@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { getCharacterList, updateActiveCharacter } from "../../repository/character.js";
+import { getCharacterList, selectCharacter } from "../../repository/character.js";
 
 export async function characterSelection() {
 	try {
@@ -16,7 +16,7 @@ export async function characterSelection() {
 		]);
 
 		const characterName = chosen.character.split("|")[1].trim();
-		const activeCharacter = await updateActiveCharacter(characterName);
+		const activeCharacter = await selectCharacter(characterName);
 
 		console.log(chalk.bold.yellow(`Welcome ${activeCharacter.name}!`));
 

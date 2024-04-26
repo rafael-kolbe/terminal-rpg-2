@@ -43,10 +43,10 @@ DECLARE
     m_atk INT;
 BEGIN
     SELECT 
-    base_hp + (hp_lv * current_level),
-    base_mp + (mp_lv * current_level),
-    base_p_atk + (p_atk_lv * current_level),
-    base_m_atk + (m_atk_lv * current_level)
+    base_hp + hp_lv,
+    base_mp + mp_lv,
+    base_p_atk + p_atk_lv,
+    base_m_atk + m_atk_lv
     INTO hp, mp, p_atk, m_atk
     FROM classes
     WHERE name = NEW.class_name;
