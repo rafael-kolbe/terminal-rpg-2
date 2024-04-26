@@ -26,7 +26,7 @@ export async function characterCreation() {
 
 			if (createdCharacter) {
 				console.log(chalk.bold.green(`Welcome to the game, ${createdCharacter.name}!`));
-				console.log(chalk.bold.green(`ID: ${createdCharacter.id}\nName: ${createdCharacter.name}\nClass: ${createdCharacter.className}`));
+				console.log(chalk.bold.green(`ID: ${createdCharacter.id}\nName: ${createdCharacter.name}\nClass: ${createdCharacter.class_name}`));
 				creating = false;
 			}
 		}

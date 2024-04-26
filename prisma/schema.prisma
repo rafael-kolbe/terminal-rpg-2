@@ -4,9 +4,9 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-generator client {
-  provider = "prisma-client-js"
-}
+// generator client {
+//   provider = "prisma-client-js"
+// }
 
 datasource db {
   provider = "postgresql"
@@ -14,31 +14,31 @@ datasource db {
 }
 
 model Player {
-  id        Int    @id @default(autoincrement())
-  name      String @unique @db.VarChar(20)
-  className String
-  level     Int    @default(1)
-  exp       Int    @default(0)
-  hp        Int
-  mp        Int
-  p_atk     Int
-  m_atk     Int
-
+  id         Int       @id @default(autoincrement())
+  name       String    @unique @db.VarChar(20)
+  class_name String
+  level      Int       @default(1)
+  exp        Int       @default(0)
+  hp         Int
+  mp         Int
+  p_atk      Int
+  m_atk      Int
   active     Boolean   @default(false)
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now()) @updatedAt
   deleted_at DateTime?
 
-  class Class @relation(fields: [className], references: [name])
+  Class       Class         @relation(fields: [class_name], references: [name])
+  OwnedSpells PlayerSpell[]
 
   @@map("players")
 }
 
 model Class {
-  id             Int    @id @default(autoincrement())
+  id             Int    @id @unique
   name           String @unique
   rank           Int
-  required_class Int
+  required_class Int?
   required_level Int
   base_hp        Int
   hp_lv          Int
@@ -50,13 +50,60 @@ model Class {
   m_atk_lv       Int
 
   Player Player[]
+  Spells Spell[]
 
   @@map("classes")
 }
 
+model Spell {
+  id             Int         @id @default(autoincrement())
+  name           String      @unique
+  type           SpellType
+  target         SpellTarget
+  target_number  Int
+  required_class Int?
+  required_level Int
+  hp_cost        Int
+  mp_cost        Int
+  cooldown       Int
+  base_p_atk     Float
+  p_atk_lv       Int
+  base_m_atk     Float
+  m_atk_lv       Int
+  buy_price      Int
+
+  Class       Class?        @relation(fields: [required_class], references: [id])
+  PlayerSpell PlayerSpell[]
+
+  @@map("spells")
+}
+
+model PlayerSpell {
+  player_id Int
+  spell_id  Int
+
+  Player Player @relation(fields: [player_id], references: [id])
+  Spell  Spell  @relation(fields: [spell_id], references: [id])
+
+  @@id([player_id, spell_id])
+  @@map("player_spells")
+}
+
 model ExperienceTable {
-  level       Int @id
-  expRequired Int @map("exp_required")
+  level        Int @id
+  exp_required Int
 
   @@map("experience_table")
+}
+
+enum SpellType {
+  Offense
+  Support
+  Buff
+  Debuff
+}
+
+enum SpellTarget {
+  Ally
+  Enemy
 }
