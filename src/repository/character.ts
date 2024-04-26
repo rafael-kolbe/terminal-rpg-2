@@ -78,7 +78,6 @@ export async function selectCharacter(characterName: string) {
         `;
 
 		const { rows: activeCharacter } = await db.query(query, [characterName]);
-		console.log(activeCharacter);
 
 		return activeCharacter[0];
 	} catch (error) {

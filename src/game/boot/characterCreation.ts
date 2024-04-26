@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { createCharacter, updateActiveCharacter } from "../../repository/character.js";
+import { createCharacter, selectCharacter } from "../../repository/character.js";
 
 export async function characterCreation() {
 	try {
@@ -31,7 +31,7 @@ export async function characterCreation() {
 			}
 		}
 
-		const activeCharacter = await updateActiveCharacter(createdCharacter.name);
+		const activeCharacter = await selectCharacter(createdCharacter.name);
 
 		console.log(chalk.bold.yellow(`Welcome ${activeCharacter.name}!`));
 
