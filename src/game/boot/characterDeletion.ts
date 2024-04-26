@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { deleteCharacter, getCharacterList } from "../repository/character.js";
+import { deleteCharacter, getCharacterList } from "../../repository/character.js";
 
 export async function characterDeletion() {
 	try {

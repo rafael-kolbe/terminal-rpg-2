@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { getCharacterList, updateActiveCharacter } from "../repository/character.js";
+import { getCharacterList, updateActiveCharacter } from "../../repository/character.js";
 
 export async function characterSelection() {
 	try {

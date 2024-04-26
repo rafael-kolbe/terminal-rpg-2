@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { getCharacterCount } from "../repository/character.js";
+import { getCharacterCount } from "../../repository/character.js";
 import { characterCreation } from "./characterCreation.js";
 import { characterDeletion } from "./characterDeletion.js";
 import { characterSelection } from "./characterSelection.js";

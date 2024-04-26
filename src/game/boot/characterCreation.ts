@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { createCharacter, updateActiveCharacter } from "../repository/character.js";
+import { createCharacter, updateActiveCharacter } from "../../repository/character.js";
 
 export async function characterCreation() {
 	try {
