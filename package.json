@@ -1,6 +1,6 @@
 {
-	"name": "game",
-	"version": "1.0.0",
+	"name": "terminal-rpg",
+	"version": "0.1.0",
 	"description": "",
 	"main": "index.js",
 	"type": "module",
@@ -12,7 +12,7 @@
 		"test": "tsx src/test/db.ts"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Rafael Kolbe | rafa.kolbe@hotmail.com",
 	"license": "ISC",
 	"dependencies": {
 		"@prisma/client": "^5.13.0",
