@@ -72,12 +72,43 @@ export async function selectCharacter(characterName: string) {
 	try {
 		const query = `
             SELECT
-			*
-			FROM players
-			WHERE name = $1;
+			p.id,
+			p.name,
+			p.class_name,
+			p.level,
+			p.exp,
+			p.hp,
+			c.base_hp + (c.hp_lv * p.level) AS "max_hp",
+			p.mp,
+			c.base_mp + (c.mp_lv * p.level) AS "max_map",
+			p.p_atk,
+			p.m_atk,
+			i.name AS "location",
+			i.floor AS "floor",
+			t.name AS "territory",
+			t.biome,
+			co.name AS "country"
+			FROM players p
+			LEFT JOIN classes c ON c.name = p.class_name
+			LEFT JOIN instances i ON i.id = p.instance_id
+			LEFT JOIN territories t ON t.id = i.territory_id
+			LEFT JOIN countries co ON co.id = t.country_id
+			WHERE p.name = $1
+        `;
+
+		const player_spells_query = `
+            SELECT
+			s.*
+			FROM spells s
+			LEFT JOIN player_spells ps ON ps.spell_id = s.id
+			LEFT JOIN players p ON p.id = ps.player_id
+			WHERE p.name = $1
         `;
 
 		const { rows: activeCharacter } = await db.query(query, [characterName]);
+		const { rows: playerSpells } = await db.query(player_spells_query, [characterName]);
+
+		activeCharacter[0].spells = playerSpells;
 
 		return activeCharacter[0];
 	} catch (error) {

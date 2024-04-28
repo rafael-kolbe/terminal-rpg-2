@@ -14,21 +14,23 @@ datasource db {
 }
 
 model Player {
-  id         Int       @id @default(autoincrement())
-  name       String    @unique @db.VarChar(20)
-  class_name String
-  level      Int       @default(1)
-  exp        Int       @default(0)
-  hp         Int
-  mp         Int
-  p_atk      Int
-  m_atk      Int
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now()) @updatedAt
-  deleted_at DateTime?
+  id          Int       @id @default(autoincrement())
+  name        String    @unique @db.VarChar(20)
+  class_name  String
+  level       Int       @default(1)
+  exp         Int       @default(0)
+  hp          Int
+  mp          Int
+  p_atk       Int
+  m_atk       Int
+  instance_id Int
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now()) @updatedAt
+  deleted_at  DateTime?
 
   Class       Class         @relation(fields: [class_name], references: [name])
   OwnedSpells PlayerSpell[]
+  Instance    Instance      @relation(fields: [instance_id], references: [id])
 
   @@map("players")
 }
@@ -48,8 +50,8 @@ model Class {
   base_m_atk     Int
   m_atk_lv       Int
 
-  Player Player[]
-  Spells Spell[]
+  Players Player[]
+  Spells  Spell[]
 
   @@map("classes")
 }
@@ -71,10 +73,68 @@ model Spell {
   m_atk_lv       Int
   buy_price      Int
 
-  Class       Class?        @relation(fields: [required_class], references: [id])
-  PlayerSpell PlayerSpell[]
+  Classes      Class?        @relation(fields: [required_class], references: [id])
+  PlayerSpells PlayerSpell[]
 
   @@map("spells")
+}
+
+model Country {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Territory Territory[]
+
+  @@map("countries")
+}
+
+model Territory {
+  id         Int    @id @default(autoincrement())
+  country_id Int?
+  biome      Biome
+  name       String
+
+  Country  Country?   @relation(fields: [country_id], references: [id])
+  Instance Instance[]
+
+  @@map("territories")
+}
+
+model Instance {
+  id           Int          @id @default(autoincrement())
+  territory_id Int
+  type         InstanceType
+  floor        String       @db.VarChar(2)
+  name         String
+
+  Connections Connection[] @relation("Origin")
+  ConnectedTo Connection[] @relation("Destination")
+  Territory   Territory    @relation(fields: [territory_id], references: [id])
+  Player      Player[]
+
+  @@map("instances")
+}
+
+model Connection {
+  id                Int     @id @default(autoincrement())
+  origin_id         Int
+  destination_id    Int
+  required_quest_id Int?
+  required_key_id   Int?
+  required_item_id  Int?
+  locked            Boolean @default(false)
+
+  Origin      Instance @relation(name: "Origin", fields: [origin_id], references: [id])
+  Destination Instance @relation(name: "Destination", fields: [destination_id], references: [id])
+
+  @@map("connections")
+}
+
+model ExperienceTable {
+  level        Int @id
+  exp_required Int
+
+  @@map("experience_table")
 }
 
 model PlayerSpell {
@@ -88,13 +148,6 @@ model PlayerSpell {
   @@map("player_spells")
 }
 
-model ExperienceTable {
-  level        Int @id
-  exp_required Int
-
-  @@map("experience_table")
-}
-
 enum SpellType {
   Offense
   Support
@@ -105,4 +158,27 @@ enum SpellType {
 enum SpellTarget {
   Ally
   Enemy
+}
+
+enum Biome {
+  Forest
+  Desert
+  Tundra
+  Grassland
+  Mountain
+  Swamp
+  Urban
+  Coastal
+  Jungle
+  Savanna
+  Volcanic
+  Ice
+  Ocean
+}
+
+enum InstanceType {
+  City
+  Building
+  Field
+  Dungeon
 }
